@@ -1,6 +1,6 @@
 ### Abrir o DB
 
-`http://localhost/phpmyadmin`
+`http://localhost/phpmyadmin/`
 
 ### Instalar pacotes do package.json
 
@@ -9,6 +9,10 @@
 ### Rodar o projeto em modo de desenvolvimento
 
 `npm dev` ou `npm run dev` (Note que esse "dev" existe no package.json na parte de scripts)
+
+### Reiniciar o projeto em modo de desenvolvimento
+
+`rs`
 
 ### Sincronizar o projeto com o github
 
