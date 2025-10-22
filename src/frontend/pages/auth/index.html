@@ -7,36 +7,31 @@
     <link rel="stylesheet" href="/public/css/bootstrap.min.css" />
     <link rel="stylesheet" href="/public/css/auth.css" />
   </head>
-  <body>
-    <div class="d-flex flex-column min-vh-100">
-      <div class="auth-page flex-grow-1 d-flex justify-content-center align-items-center">
-        <form action=" /login" method="post">
-          <img class="logo" src="/public/images/logo.png" alt="logo" />
-          <h2>Fazer login</h2>
-          <input
-            type="email"
-            name="email"
-            class="form-control"
-            placeholder="E-mail"
-          />
-          <input
-            type="password"
-            name="senha"
-            class="form-control"
-            placeholder="Senha"
-          />
-          <button type="submit" class="btn">Enviar</button>
-        </form>
-      </div>
-      <div id="footer-placeholder"></div>
+  <body class="d-flex flex-column min-vh-100">
+    <header id="header-placeholder"></header>
+
+    <div
+      class="auth-page flex-grow-1 d-flex justify-content-center align-items-center"
+    >
+      <form action=" /login" method="post">
+        <img class="logo" src="/public/images/logo.png" alt="logo" />
+        <h2>Fazer login</h2>
+        <input
+          type="email"
+          name="email"
+          class="form-control"
+          placeholder="E-mail"
+        />
+        <input
+          type="password"
+          name="senha"
+          class="form-control"
+          placeholder="Senha"
+        />
+        <button type="submit" class="btn">Enviar</button>
+      </form>
     </div>
-    <script>
-      fetch("/public/partials/footer.html")
-        .then((res) => res.text())
-        .then(
-          (html) =>
-            (document.getElementById("footer-placeholder").innerHTML = html)
-        );
-    </script>
+    <footer id="footer-placeholder"></footer>
+    <script src="/public/js/layout.js"></script>
   </body>
 </html>

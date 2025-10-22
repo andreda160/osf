@@ -10,3 +10,7 @@ footer img:hover {
   filter: brightness(0) invert(1);
   /* efeito hover: inverte as cores */
 }
+
+footer .line {
+  background-color: #4b4b4b;
+}

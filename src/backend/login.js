@@ -5,7 +5,7 @@ const db = require('../database/config/db'); // ajusta o caminho conforme sua pa
 const router = express.Router();
 
 // Caminho para o HTML da home (pode vir por parâmetro também)
-const homePath = 'src/frontend/pages/home/index.html';
+const homePath = 'src/frontend/pages/shop/pricing/index.html';
 const home = '/home';
 
 // Rota POST para processar o login
