@@ -9,7 +9,7 @@ dotenv.config();
 const app = express();
 const PORT = process.env.PORT;
 const testPath = 'src/frontend/pages/test/PLACEHOLDER.html';
-const homePath = 'src/frontend/pages/home/index.html';
+const homePath = 'src/frontend/pages/auth/index.html';
 const auth = '/login';
 
 // Importa LiveReload apenas se estiver em desenvolvimento

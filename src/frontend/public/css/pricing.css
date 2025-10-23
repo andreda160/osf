@@ -1,23 +1,6 @@
 .pricing-page {
   background-color: #f8f9fa;
   font-family: Arial, sans-serif;
-  padding: 20px;
-}
-
-.pricing-page .navbar {
-  background-color: #28a745;
-  padding: 10px;
-}
-
-.pricing-page .navbar a {
-  color: #fff;
-  text-decoration: none;
-  margin: 0 15px;
-  font-weight: bold;
-}
-
-.pricing-page .navbar a:hover {
-  text-decoration: underline;
 }
 
 .pricing-page .filter-bar {
