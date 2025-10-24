@@ -77,7 +77,3 @@ Precisa ser utilizado com `d-flex` ou `d-grid`
 - `livereload`
 - `sweetalert2`
 - `jcalendar.js`
-```
-https://www.calendar-js.com/demos/basic/calendar
-npm install jcalendar.js
-```
