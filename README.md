@@ -81,3 +81,7 @@ npm install sweetalert2
 https://www.calendar-js.com/demos/basic/calendar
 npm install jcalendar.js
 ```
+
+```
+npm install chalk
+```

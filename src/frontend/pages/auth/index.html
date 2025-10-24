@@ -17,16 +17,6 @@
     
     </script>
 
-    <script>
-      document.addEventListener('DOMContentLoaded', () => {
-  Swal.fire({
-    title: 'Login',
-    text: 'Bem-vindo!',
-    icon: 'success'
-  });
-});
-
-    </script>
   </head>
   <body class="d-flex flex-column min-vh-100">
     <header id="header-placeholder"></header>
@@ -53,7 +43,39 @@
       </form>
     </div>
     <footer id="footer-placeholder"></footer>
-    <script src="/public/js/layout.js"></>
+    <script src="/public/js/layout.js"></script>
+    <script>
+      document.addEventListener('DOMContentLoaded', () => {
+        const params = new URLSearchParams(window.location.search);
+        const error = params.get('error');
+    
+        if (error === 'missing') {
+          Swal.fire({
+            icon: "warning",
+            title: "Campos obrigatórios",
+            text: "Por favor, preencha e-mail e senha.",
+          });
+        } else if (error === 'invalid') {
+          Swal.fire({
+            icon: "error",
+            title: "Oops...",
+            text: "E-mail ou senha inválida!",
+          });
+        } else if (error === 'blocked') {
+          Swal.fire({
+            icon: "error",
+            title: "Usuário bloqueado",
+            text: "Contate o administrador para mais informações.",
+          });
+        } else if (error === 'db') {
+          Swal.fire({
+            icon: "error",
+            title: "Erro no servidor",
+            text: "Falha ao conectar com o banco de dados.",
+          });
+        }
+      });
+    </script>
   </body>
 </html>
 

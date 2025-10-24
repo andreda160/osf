@@ -13,22 +13,25 @@ router.post('/login', (req, res) => {
   const { email, senha } = req.body;
 
   if (!email || !senha) {
-    return res.send(`<h3 style="color:red;">E-mail ou senha inválida</h3><a href="/login">Voltar</a>`);
+    return res.redirect(`/login?error=missing`);
   }
 
   const senhaHash = crypto.createHash('md5').update(senha).digest('hex');
 
   const sql = 'SELECT * FROM usuario WHERE email = ? AND senha = ?';
   db.query(sql, [email, senhaHash], (err, results) => {
-    if (err) return res.send('Erro no banco de dados.');
+    if (err) {
+      console.error(err);
+      return res.redirect('/login?error=db');
+    }
 
     if (results.length === 0) {
-      return res.send(`<h3 style="color:red;">Email ou senha inválida</h3><a href="/login">Voltar</a>`);
+      return res.redirect(`/login?error=invalid`);
     }
 
     const user = results[0];
     if (user.ativo === 0) {
-      return res.send(`<h3 style="color:orange;">Usuário bloqueado. Contate o administrador.</h3><a href="/login">Voltar</a>`);
+      return res.redirect(`/login?error=blocked`);
     }
 
     // ✅ Login bem-sucedido → redireciona para /home

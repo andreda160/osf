@@ -41,5 +41,5 @@ app.use('/', login);
 app.use('/', pricing);
 
 app.listen(PORT, () => {
-  console.log(`\n🚀 Servidor rodando em \x1b[34mhttp://localhost:${PORT}\x1b[0m`);
+  console.log(`\n✅ - Servidor conectado: \x1b[34mhttp://localhost:${PORT}\x1b[0m`);
 });

@@ -4,6 +4,7 @@ const dotenv = require('dotenv');
 
 dotenv.config();
 
+const DB_NAME = process.env.DB_NAME;
 const connection = mysql.createConnection({
   host: process.env.DB_HOST,
   user: process.env.DB_USER,
@@ -13,10 +14,10 @@ const connection = mysql.createConnection({
 
 connection.connect(err => {
   if (err) {
-    console.error('Erro na conexão com o banco:', err.message);
+    console.error('❌ - Banco conectado: \x1b[31m', err.message , '\x1b[0m\n');
     return;
   }
-  console.log('✅ Conectado ao banco de dados com sucesso!');
+  console.log('✅ - Banco conectado: \x1b[93m', DB_NAME ,'\x1b[0m\n');
 });
 
 module.exports = connection;
