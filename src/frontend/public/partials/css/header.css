@@ -1,0 +1,34 @@
+.nav-item {
+  border-radius: 16px;
+  font-weight: 700;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.nav-item .nav-link {
+  transition: color 0.3s ease;
+}
+
+.nav-item:hover {
+  background-color: var(--bs-secondary);
+}
+
+.nav-item:hover .nav-link {
+  color: var(--bs-light) !important;
+}
+
+header .line {
+  background-color: #4b4b4b;
+}
+
+header .btn {
+  border-radius: 16px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background-color 0.3s ease, color 0.3s ease, filter 0.3s ease;
+}
+
+header .btn:hover {
+  background-color: var(--bs-light);
+  color: var(--bs-dark) !important;
+  filter: none;
+}

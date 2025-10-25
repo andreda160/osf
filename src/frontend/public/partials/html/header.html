@@ -7,15 +7,14 @@
     <script src="/public/js/head.js" defer></script>
   </head>
   <body class="d-flex flex-column min-vh-100">
-
-    <header id="header-placeholder">
-      <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <header id="header-placeholder" class=" bg-dark">
+      <nav class="navbar navbar-expand-lg navbar-dark py-2">
         <div class="container-fluid">
           <img
             class="logo m-1"
             src="/public/images/logo.png"
             alt="logo"
-            style="max-width: 64px"
+            style="max-width: 100px; border-radius: 18px;"
           />
           <a class="navbar-brand mx-4" href="/home">Osf Barbearia</a>
           <button
@@ -29,33 +28,27 @@
           >
             <span class="navbar-toggler-icon"></span>
           </button>
-          <div class="collapse navbar-collapse" id="navbarSupportedContent">
-            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+          <div class="collapse navbar-collapse p-2" id="navbarSupportedContent">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0 d-flex gap-3 ms-1">
               <li class="nav-item">
-                <a href="../home" class="nav-link">Home</a>
+                <a href="../home" class="nav-link text-secondary">Home</a>
               </li>
-              <li class="nav-item">
-                <a href="../pessoa" class="nav-link">Pessoas</a>
-              </li>
-              <li class="nav-item">
-                <a href="../usuario" class="nav-link">Usuários</a>
-              </li>
-              <li class="nav-item">
+              <li class="nav-item hover-bg-light">
                 <a
                   href="../dashboard?logout=true"
                   onclick="return confirm('Deseja sair do sistema?')"
-                  class="nav-link"
+                  class="nav-link text-secondary"
+                  >Sair</a
                 >
-                  Sair
-                </a>
               </li>
             </ul>
-
+            
             <!-- Botão de Login à direita -->
-            <a href="/auth" class="btn btn-primary ms-auto">Login</a>
+            <a href="/auth" class="btn ms-auto me-3 px-5 py-2 text-white btn-success">Login</a>
           </div>
         </div>
       </nav>
+      <div class="line py-1"></div>
     </header>
 
     <!-- Scripts Bootstrap 5 -->

@@ -54,6 +54,7 @@ Deve-se substituir `*` por um número para aplicar a estilização
 - `bg-dark` Escuro
 - `bg-light` Claro
 - `bg-primary` Azul
+- `bg-secondary` Cinza médio
 - `bg-success` Verde
 - `bg-danger` Vermelho
 
@@ -63,6 +64,8 @@ Deve-se substituir `*` por um número para aplicar a estilização
 Pode-se substituir `m` por `p` para aplicar padding e substituir `*`
 por `auto` para centralizar o elemento 
 
+- `ms-*` Margin-Start (Left)
+- `me-*` Margin-End (Right)
 - `mt-*` Margin-Top
 - `mb-*` Margin-Bottom
 - `mx-*` Margin-Left + Margin-Right
