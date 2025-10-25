@@ -5,6 +5,8 @@ const db = require('./src/database/config/db');
 const home = require('./src/backend/routes/home.js');
 const auth = require('./src/backend/routes/auth.js');
 const pricing = require('./src/backend/routes/pricing.js');
+const team = require('./src/backend/routes/team.js');
+const booking = require('./src/backend/routes/booking.js');
 
 const app = express();
 
@@ -36,5 +38,7 @@ app.get(route, (req, res) => {
 app.use('/', home);
 app.use('/', auth);
 app.use('/', pricing);
+app.use('/', team);
+app.use('/', booking);
 
 module.exports = app;

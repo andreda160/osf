@@ -9,7 +9,7 @@ const connection = mysql.createConnection({
 
 connection.connect(err => {
   if (err) {
-    console.error('❌ - Banco conectado: \x1b[31m', err.message , '\x1b[0m\n');
+    console.error('⏸  - Crie o banco: \x1b[34mhttp://localhost/phpmyadmin/\x1b[0m\n❌ - Banco conectado: \x1b[31m', err.message, '\x1b[0m');
     return;
   }
   console.log('✅ - Banco conectado: \x1b[93m', DB_NAME ,'\x1b[0m\n');
