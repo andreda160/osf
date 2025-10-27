@@ -27,17 +27,17 @@ commit novo...
 
 ### Subir um novo commit
 
-``
+```
 git add .
 git commit -m "Alterei X Coisa"
 git push
-``
+```
 
 ### Para clonar o projeto no seu PC
 
-``
+```
 git clone https://github.com/Resfriado/osf.git Osf
-``
+```
 
 ### Regras do front-end
 
