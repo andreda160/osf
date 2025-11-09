@@ -1,40 +1,97 @@
-name: Summarize new issues
+name: Update all open issues with AI descriptions
 
 on:
-  issues:
-    types: [opened]
+  workflow_dispatch:  # permite execução manual
+  schedule:
+    - cron: "*/1 * * * *"  # (opcional) executa diariamente às 03:00 UTC
+
+permissions:
+  issues: write
+  contents: read
 
 jobs:
-  summary:
+  update-issues:
     runs-on: ubuntu-latest
-    permissions:
-      issues: write
-      models: read
-      contents: read
 
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Run AI inference
-        id: inference
-        uses: actions/ai-inference@v1
+      - name: List all open issues
+        id: list
+        uses: actions/github-script@v6
         with:
-          prompt: |
-            You are an assistant that writes a concise, developer-friendly, and localized description for a GitHub issue.
-            Create:
-            1) One short paragraph translated in the language the title and body is using, summarizing the issue in a clear technical tone.
-            2) A short, bullet-style step-by-step checklist (3-6 steps) on how to approach/solve the issue.
-            3) A short "notes" line about environment or prerequisites if relevant.
-            Important: no extra sections; do not repeat the paragraph. Output only the content (no markdown title lines).
-            Title: ${{ github.event.issue.title }}
-            Current body: ${{ github.event.issue.body }}
-            Output must be appropriate to be placed in the issue body.
-            
-      - name: Comment with AI summary
-        run: |
-          gh issue comment $ISSUE_NUMBER --body "${{ steps.inference.outputs.response }}"
+          script: |
+            const issues = await github.paginate(
+              github.rest.issues.listForRepo,
+              {
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                state: "open",
+              }
+            );
+            const list = issues
+              .filter(i => !i.pull_request) // ignora PRs
+              .map(i => i.number);
+            core.setOutput("issues", JSON.stringify(list));
+            core.info(`Found ${list.length} open issues.`);
+      
+      - name: Process each open issue
+        uses: actions/github-script@v6
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          ISSUE_NUMBER: ${{ github.event.issue.number }}
-          RESPONSE: ${{ steps.inference.outputs.response }}
+        with:
+          script: |
+            const issues = JSON.parse(core.getInput('issues', { required: true }));
+            for (const issueNumber of issues) {
+              core.info(`Processing issue #${issueNumber}`);
+
+              const { data: issue } = await github.rest.issues.get({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: issueNumber
+              });
+
+              const body = issue.body || "";
+              const hasSummary = body.includes("<!-- ai-summary -->");
+
+              // apenas se não tiver resumo ainda
+              if (!hasSummary || body.trim().length < 30) {
+                core.info(`Generating AI summary for issue #${issueNumber}`);
+
+                const prompt = `
+You are an assistant that writes a concise, developer-friendly, and localized description for a GitHub issue.
+Create:
+1) One short paragraph translated in the language the title and body are using, summarizing the issue in a clear technical tone.
+2) A short, bullet-style step-by-step checklist (3–6 steps) on how to approach/solve the issue.
+3) A short "notes" line about environment or prerequisites if relevant.
+Important: no extra sections; do not repeat the paragraph. Output only the content (no markdown title lines).
+Title: ${issue.title}
+Current body: ${body}
+Output must be appropriate to be placed in the issue body.
+`;
+
+                const { data: aiRun } = await github.request("POST /ai-inference", {
+                  headers: { authorization: `Bearer ${process.env.GH_TOKEN}` },
+                  input: prompt
+                }).catch(e => {
+                  core.warning(`AI inference failed for issue #${issueNumber}: ${e.message}`);
+                  return {};
+                });
+
+                if (aiRun && aiRun.response) {
+                  const newBody = `${body.trim()}\n\n<!-- ai-summary -->\n${aiRun.response}\n<!-- ai-summary:end -->`;
+                  await github.rest.issues.update({
+                    owner: context.repo.owner,
+                    repo: context.repo.repo,
+                    issue_number: issueNumber,
+                    body: newBody
+                  });
+                  core.info(`Updated issue #${issueNumber}`);
+                }
+              } else {
+                core.info(`Issue #${issueNumber} already has an AI summary.`);
+              }
+            }
+        with:
+          issues: ${{ steps.list.outputs.issues }}
