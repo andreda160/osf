@@ -1,9 +1,9 @@
 name: Update all open issues with AI descriptions
 
 on:
-  workflow_dispatch:  # permite execução manual
+  workflow_dispatch: # permite execução manual
   schedule:
-    - cron: "*/1 * * * *"  # (opcional) executa diariamente às 03:00 UTC
+    - cron: "*/1 * * * *" # executa a cada 1 minuto
 
 permissions:
   issues: write
@@ -31,18 +31,19 @@ jobs:
               }
             );
             const list = issues
-              .filter(i => !i.pull_request) // ignora PRs
+              .filter(i => !i.pull_request)
               .map(i => i.number);
             core.setOutput("issues", JSON.stringify(list));
             core.info(`Found ${list.length} open issues.`);
-      
+
       - name: Process each open issue
         uses: actions/github-script@v6
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          ISSUES: ${{ steps.list.outputs.issues }}
         with:
           script: |
-            const issues = JSON.parse(core.getInput('issues', { required: true }));
+            const issues = JSON.parse(process.env.ISSUES);
             for (const issueNumber of issues) {
               core.info(`Processing issue #${issueNumber}`);
 
@@ -55,43 +56,34 @@ jobs:
               const body = issue.body || "";
               const hasSummary = body.includes("<!-- ai-summary -->");
 
-              // apenas se não tiver resumo ainda
               if (!hasSummary || body.trim().length < 30) {
-                core.info(`Generating AI summary for issue #${issueNumber}`);
+                core.info(`Generating summary for issue #${issueNumber}`);
 
-                const prompt = `
-You are an assistant that writes a concise, developer-friendly, and localized description for a GitHub issue.
-Create:
-1) One short paragraph translated in the language the title and body are using, summarizing the issue in a clear technical tone.
-2) A short, bullet-style step-by-step checklist (3–6 steps) on how to approach/solve the issue.
-3) A short "notes" line about environment or prerequisites if relevant.
-Important: no extra sections; do not repeat the paragraph. Output only the content (no markdown title lines).
-Title: ${issue.title}
-Current body: ${body}
-Output must be appropriate to be placed in the issue body.
-`;
+                // Simula o resultado da IA
+                const aiSummary = `
+<!-- ai-summary -->
+${issue.title} — summarized automatically.
 
-                const { data: aiRun } = await github.request("POST /ai-inference", {
-                  headers: { authorization: `Bearer ${process.env.GH_TOKEN}` },
-                  input: prompt
-                }).catch(e => {
-                  core.warning(`AI inference failed for issue #${issueNumber}: ${e.message}`);
-                  return {};
+Steps:
+1. Review the context of this issue.
+2. Apply required logic as described.
+3. Test changes and verify resolution.
+
+Notes: Generated automatically for ${issue.title}.
+<!-- ai-summary:end -->
+                `.trim();
+
+                const newBody = `${body.trim()}\n\n${aiSummary}`;
+
+                await github.rest.issues.update({
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  issue_number: issueNumber,
+                  body: newBody
                 });
 
-                if (aiRun && aiRun.response) {
-                  const newBody = `${body.trim()}\n\n<!-- ai-summary -->\n${aiRun.response}\n<!-- ai-summary:end -->`;
-                  await github.rest.issues.update({
-                    owner: context.repo.owner,
-                    repo: context.repo.repo,
-                    issue_number: issueNumber,
-                    body: newBody
-                  });
-                  core.info(`Updated issue #${issueNumber}`);
-                }
+                core.info(`✅ Updated issue #${issueNumber}`);
               } else {
-                core.info(`Issue #${issueNumber} already has an AI summary.`);
+                core.info(`⏩ Issue #${issueNumber} already has an AI summary.`);
               }
             }
-        with:
-          issues: ${{ steps.list.outputs.issues }}
