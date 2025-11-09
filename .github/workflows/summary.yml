@@ -21,7 +21,7 @@ jobs:
         uses: actions/ai-inference@v1
         with:
           prompt: |
-            Summarize the following GitHub issue in one paragraph:
+            Summarize the following GitHub issue in one paragraph, making a quick step by step on how to make it and translate the paragraph into the read language alphabet:
             Title: ${{ github.event.issue.title }}
             Body: ${{ github.event.issue.body }}
 
