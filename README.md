@@ -79,6 +79,7 @@ Precisa ser utilizado com `d-flex` ou `d-grid`
 
 ### Bibliotecas
 
+- `nodemon`
 - `livereload`
 - `sweetalert2`
 - `jcalendar.js`
