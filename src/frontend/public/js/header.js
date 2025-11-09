@@ -49,7 +49,7 @@ function setupHeaderButton() {
 // Como o script já é defer, podemos executar direto
 loadPartial(
   "header-placeholder",
-  "/public/partials/html/header.html",
+  "/public/partials/header.html",
   setupHeaderButton
 );
-loadPartial("footer-placeholder", "/public/partials/html/footer.html");
+loadPartial("footer-placeholder", "/public/partials/footer.html");

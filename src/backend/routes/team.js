@@ -1,7 +1,7 @@
 const express = require("express");
 const path = require("path");
 const crypto = require("crypto");
-const db = require("../../database/config/db"); // ajusta o caminho conforme sua pasta
+const db = require("../core/config/db"); // ajusta o caminho conforme sua pasta
 const router = express.Router();
 
 const route = '/team';

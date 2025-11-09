@@ -11,7 +11,7 @@ function setupDevReload(app) {
     });
 
     // Observa a pasta frontend
-    liveReloadServer.watch(path.join(__dirname, "../../frontend"));
+    liveReloadServer.watch(path.join(__dirname, "../../../frontend"));
 
     // Middleware para injetar script do livereload
     app.use(connectLivereload());

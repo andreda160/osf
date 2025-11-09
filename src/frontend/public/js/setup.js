@@ -47,8 +47,8 @@
   
   // 🧩 CSS específico da página
   injectLink(`/public/css/${pageFolder}.css`);
-  injectLink(`/public/partials/css/header.css`);
-  injectLink(`/public/partials/css/footer.css`);
+  injectLink(`/public/css/header.css`);
+  injectLink(`/public/css/footer.css`);
 
   
 
