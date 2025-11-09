@@ -1,5 +1,0 @@
-### Backend
-
-### Database
-
-### Frontend

@@ -18,11 +18,10 @@ function setupDevReload(app) {
 
     // Loga quando o navegador se conecta
     liveReloadServer.server.on("connection", () => {
-      console.log('⌛️ - Página recarregada');
     });
-      console.log('\n✅ - LiveReload conectado');
+      //console.log('\n\x1b[90m╭──────────────────────────────\x1b[38;5;153mOsf\x1b[0m\x1b[90m─\x1b[0m\x1b[38;5;153mBarbearia\x1b[0m\x1b[90m──────────────────────────────╮\n│                                                                         │\x1b[0m\n\x1b[92m◆  LiveReload\x1b[0m                                                             \x1b[90m│\n│                                                                         │');
   } catch (err) {
-    console.error('❌ - LiveReload conectado: \x1b[31m', err.message , '\x1b[0m\n');
+    console.error(err.message);
   }
 }
 

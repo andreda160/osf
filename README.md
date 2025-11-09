@@ -36,7 +36,7 @@ git push
 ### Para clonar o projeto no seu PC
 
 ``
-git clone https://github.com/Resfriado/osf.git Osf
+git clone https://github.com/Resfriado/osf.git osf
 ``
 
 ### Regras do front-end

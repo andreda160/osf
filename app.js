@@ -1,7 +1,7 @@
 const express = require('express');
 const fs = require('fs');
 const path = require('path');
-const db = require('./src/database/config/db');
+const db = require('./src/database/config/db.js');
 const home = require('./src/backend/routes/home.js');
 const auth = require('./src/backend/routes/auth.js');
 const pricing = require('./src/backend/routes/pricing.js');
@@ -16,7 +16,7 @@ app.use(express.urlencoded({ extended: true }));
 require('./src/backend/utils/static.js')(app);
 
 if (process.env.NODE_ENV !== 'production') {
-  const setupLiveReload = require('./src/backend/utils/devReload.js');
+  const setupLiveReload = require('./src/backend/utils/liveReload.js');
   setupLiveReload(app);
 }
 

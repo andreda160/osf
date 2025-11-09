@@ -9,10 +9,10 @@ const connection = mysql.createConnection({
 
 connection.connect(err => {
   if (err) {
-    console.error('⏸  - Crie o banco: \x1b[34mhttp://localhost/phpmyadmin/\x1b[0m\n❌ - Banco conectado: \x1b[31m', err.message, '\x1b[0m');
+    console.error('\x1b[92m◇  Database\x1b[0m:                                                              \x1b[90m│\n│\x1b[0m    -\x1b[31m', err.message, '\x1b[0m                               \x1b[90m│\x1b[0m\n\x1b[90m│\x1b[0m    - \x1b[36mhttp://localhost/phpmyadmin/                                       \x1b[90m│\n│                                                                         │\n╰─────────────────────────────────────────────────────────────────────────╯\x1b[0m\n');
     return;
   }
-  console.log('✅ - Banco conectado: \x1b[93m', DB_NAME ,'\x1b[0m\n');
+  console.log('\x1b[92m◆  Database\x1b[0m:                                                              \x1b[90m│\n│\x1b[0m    -\x1b[93m', DB_NAME ,'\x1b[0m                                                       \x1b[90m│\n│                                                                         │\n╰─────────────────────────────────────────────────────────────────────────╯\x1b[0m\n');
 });
 
 module.exports = connection;
