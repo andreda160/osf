@@ -1,93 +1,22 @@
-name: Summarize or update issue description
+name: Summarize new issues
 
 on:
   issues:
-    types: [opened, edited, reopened]
-
-permissions:
-  issues: write
-  contents: read
-  # models: read  # leave commented or enable if required by actions/ai-inference usage policy
+    types: [opened]
 
 jobs:
-  ensure-description:
+  summary:
     runs-on: ubuntu-latest
-    concurrency:
-      group: "ensure-description-${{ github.event.issue.number }}"
-      cancel-in-progress: false
+    permissions:
+      issues: write
+      models: read
+      contents: read
 
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Determine if issue needs AI description
-        id: check
-        uses: actions/github-script@v6
-        with:
-          script: |
-            const issueNumber = context.payload.issue.number;
-            const { data: issue } = await github.rest.issues.get({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              issue_number: issueNumber
-            });
-
-            const body = issue.body || "";
-            // Marker format: <!-- ai-desc:vX -->
-            const markerRegex = /<!--\s*ai-desc:v(\d+)\s*-->([\s\S]*?)<!--\s*ai-desc:end\s*-->/i;
-            const markerPresent = markerRegex.test(body);
-
-            // Desired marker version for this workflow:
-            const desiredVersion = 2;
-
-            let needsUpdate = false;
-            let reason = '';
-            let existingAISection = null;
-            let existingVersion = null;
-
-            if (!body || body.trim().length === 0) {
-              needsUpdate = true;
-              reason = 'missing';
-            } else if (!markerPresent) {
-              needsUpdate = true;
-              reason = 'no-marker';
-            } else {
-              const match = markerRegex.exec(body);
-              if (match) {
-                existingVersion = parseInt(match[1], 10);
-                existingAISection = match[2];
-                if (existingVersion < desiredVersion) {
-                  needsUpdate = true;
-                  reason = 'deprecated';
-                } else {
-                  needsUpdate = false;
-                  reason = 'up-to-date';
-                }
-              } else {
-                needsUpdate = true;
-                reason = 'no-marker';
-              }
-            }
-
-            return {
-              needs_update: needsUpdate,
-              reason,
-              existing_body: body,
-              existing_ai_section: existingAISection || '',
-              existing_version: existingVersion || null,
-              desired_version: desiredVersion
-            };
-
-      - name: Debug check result
-        if: always()
-        run: |
-          echo "needs_update=${{ steps.check.outputs.needs_update }}"
-          echo "reason=${{ steps.check.outputs.reason }}"
-          echo "existing_version=${{ steps.check.outputs.existing_version }}"
-
-      # Generate AI description only when needed
-      - name: Run AI inference to generate description
-        if: steps.check.outputs.needs_update == 'true'
+      - name: Run AI inference
         id: inference
         uses: actions/ai-inference@v1
         with:
@@ -101,62 +30,11 @@ jobs:
             Title: ${{ github.event.issue.title }}
             Current body: ${{ github.event.issue.body }}
             Output must be appropriate to be placed in the issue body.
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Update issue body with AI description (add or replace)
-        if: steps.check.outputs.needs_update == 'true'
-        uses: actions/github-script@v6
-        with:
-          script: |
-            const issueNumber = context.payload.issue.number;
-            const existingBody = `${{ steps.check.outputs.existing_body }}` || "";
-            const desiredVersion = parseInt(`${{ steps.check.outputs.desired_version }}`, 10);
-
-            // Content returned from AI step:
-            const aiText = `${{ steps.inference.outputs.response || '' }}`.trim();
-
-            // Fallback if AI didn't return a response
-            if (!aiText) {
-              core.setFailed("AI step returned empty response; aborting update.");
-              return;
-            }
-
-            // Build the AI section with start and end markers (hidden HTML comments)
-            const aiSection = `\n\n<!-- ai-desc:v${desiredVersion} -->\n${aiText}\n<!-- ai-desc:end -->\n`;
-
-            // If there was an existing ai section, remove it and replace, else append
-            const markerRegex = /<!--\s*ai-desc:v\d+\s*-->([\s\S]*?)<!--\s*ai-desc:end\s*-->/i;
-            let newBody;
-            if (markerRegex.test(existingBody)) {
-              newBody = existingBody.replace(markerRegex, aiSection);
-            } else if (!existingBody || existingBody.trim().length === 0) {
-              // If body empty, we set AI section as the body (but keep small header)
-              newBody = `${aiSection}`;
-            } else {
-              // Preserve the author's content and append the AI section
-              newBody = `${existingBody.trim()}\n\n---\n\n${aiSection}`;
-            }
-
-            // Update the issue body via REST API
-            await github.rest.issues.update({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              issue_number: issueNumber,
-              body: newBody
-            });
-
-            core.setOutput("updated", "true");
-            core.info("Issue body updated with AI description (added/replaced).");
-
-      - name: Comment noting update (optional)
-        if: steps.check.outputs.needs_update == 'true'
+            
+      - name: Comment with AI summary
         run: |
-          gh issue comment $ISSUE_NUMBER --body "An AI-generated description was added/updated by the repository workflow (marker ai-desc:v${{ steps.check.outputs.desired_version }}). If you prefer manual content, please edit the issue body."
+          gh issue comment $ISSUE_NUMBER --body "${{ steps.inference.outputs.response }}"
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           ISSUE_NUMBER: ${{ github.event.issue.number }}
-
-      - name: Skip - nothing to do
-        if: steps.check.outputs.needs_update != 'true'
-        run: echo "No update required (reason=${{ steps.check.outputs.reason }})."
+          RESPONSE: ${{ steps.inference.outputs.response }}
