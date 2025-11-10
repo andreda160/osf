@@ -6,7 +6,9 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node src/backend/start.js",
-    "dev": "nodemon src/backend/start.js"
+    "dev": "nodemon src/backend/start.js",
+    "db:setup": "node src/backend/database/dbSetup.js",
+    "db:drop": "node src/backend/database/dbDrop.js"
   },
   "repository": {
     "type": "git",

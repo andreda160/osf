@@ -1,8 +1,10 @@
-### Abrir o DB
-
+### Iniciar o DB
 
 [http://localhost/phpmyadmin/](http://localhost/phpmyadmin/)
 
+`npm run db:drop` Exclui o banco obsoleto ou anterior
+
+`npm run db:setup` Cria um novo banco e adiciona as tabelas e seeds automáticamente
 
 ### Instalar pacotes do package.json
 
@@ -12,7 +14,7 @@ Em máquina externa utilize `cmd` antes
 
 ### Rodar o projeto em modo de desenvolvimento
 
-`npm dev` ou `npm run dev` (Note que esse "dev" existe no package.json na parte de scripts)
+`npm run dev` (Note que esse "dev" existe no package.json na parte de scripts)
 
 ### Reiniciar o projeto em modo de desenvolvimento
 
