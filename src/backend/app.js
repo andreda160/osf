@@ -19,7 +19,7 @@ if (process.env.NODE_ENV !== 'production') {
 }
 
 const route = '/home';
-const newPath = 'src/frontend/pages/test/index.html';
+const newPath = 'src/frontend/pages/template/index.html';
 
 app.get('/', (req, res) => {
   res.redirect(route);
