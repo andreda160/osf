@@ -42,6 +42,7 @@
 
   // 🧩 CSS globais
   injectLink("/public/assets/bulma/bulma.min.css");
+  injectLink("/public/assets/fontawesome/css/all.min.css");
   injectLink("/public/assets/sweetalert2/sweetalert2.min.css");
   injectLink("/public/assets/jcalendar.js/jcalendar.js.css");
   

@@ -23,6 +23,7 @@
   },
   "homepage": "https://github.com/Resfriado/osf#readme",
   "dependencies": {
+    "@fortawesome/fontawesome-free": "^7.1.0",
     "bulma": "^1.0.4",
     "dotenv": "^17.2.3",
     "express": "^5.1.0",
