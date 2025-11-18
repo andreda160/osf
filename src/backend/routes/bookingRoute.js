@@ -1,7 +1,5 @@
 const express = require("express");
 const path = require("path");
-const crypto = require("crypto");
-const db = require("../core/config/dbConnection"); // ajusta o caminho conforme sua pasta
 const router = express.Router();
 
 const route = '/booking';
