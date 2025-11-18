@@ -1,5 +1,8 @@
 module.exports = {
   findByEmail: `
-    SELECT id FROM usuario WHERE email = ? LIMIT 1;
+    SELECT id, email, senha, ativo
+    FROM usuario
+    WHERE email = ?
+    LIMIT 1;
   `
 };

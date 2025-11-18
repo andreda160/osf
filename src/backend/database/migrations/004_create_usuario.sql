@@ -7,10 +7,3 @@ CREATE TABLE usuario (
   historicoAtendimentos TEXT,
   FOREIGN KEY (pessoa_id) REFERENCES pessoa(id)
 );
-
-CREATE TRIGGER hash_senha_usuario
-BEFORE INSERT ON usuario
-FOR EACH ROW
-BEGIN
-  SET NEW.senha = MD5(NEW.senha);
-END;
