@@ -1,8 +1,10 @@
 const express = require('express');
 const fs = require('fs');
+const session = require('./routes/sessionRoute.js');
 const login = require('./routes/loginRoute.js');
 const register = require('./routes/registerRoute.js')
 const home = require('./routes/homeRoute.js');
+const dashboard = require('./routes/dashboardRoute.js');
 const pricing = require('./routes/pricingRoute.js');
 const team = require('./routes/teamRoute.js');
 const booking = require('./routes/bookingRoute.js');
@@ -19,6 +21,9 @@ if (process.env.NODE_ENV !== 'production') {
   setupLiveReload(app);
 }
 
+const sessionMiddleware = require('./core/middleware/session.js');
+app.use(sessionMiddleware);
+
 const route = '/login';
 const newPath = 'src/frontend/pages/auth/login/index.html';
 
@@ -33,9 +38,11 @@ app.get(route, (req, res) => {
   });
 });
 
+app.use('/', session);
 app.use('/', login);
 app.use('/', register);
 app.use('/', home);
+app.use('/', dashboard);
 app.use('/', pricing);
 app.use('/', team);
 app.use('/', booking);

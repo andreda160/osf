@@ -1,5 +1,6 @@
 const bcrypt = require('bcryptjs');
-const model = require('../models/registerUsuarioModel.js')
+const model = require('../models/registerUsuarioModel.js');
+const funcionarioLoginModel = require('../models/funcionarioLoginModel.js');
 const { showPage } = require("../core/utils/pageController.js");
 const newPath = "../frontend/pages/auth/login/index.html";
 
@@ -15,7 +16,12 @@ exports.login = async function (req, res) {
 
     if (user.ativo === 0) throw new Error('\x1b[0mUsuário bloqueado');
 
-    console.log(`✅ - Login: \x1b[92m${email}\x1b[0m, \x1b[92m${user.senha}\x1b[0m\n`);
+    const cargoResult = await funcionarioLoginModel.getCargo(user.id);
+    const cargo = cargoResult?.cargo || null;
+    req.session.cargo = cargo;
+
+    console.log(`✅ - Login: \x1b[92m${email}\x1b[0m, \x1b[92m${user.senha}\x1b[0m, \x1b[92m${cargo}\x1b[0m\n`);
+
     return res.redirect('/home');
 
   } catch (err) {
