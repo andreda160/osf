@@ -1,4 +1,4 @@
 const { showPage } = require("../../core/utils/pageController.js");
-const newPath = "../../src/frontend/pages/shop/pricing/index.html";
+const newPath = "src/frontend/pages/shop/pricing/index.html";
 
 exports.page = showPage(newPath);
