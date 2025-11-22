@@ -33,7 +33,7 @@ function showBreadcrumb() {
     // ---- CURRENT PAGE ----
     if (index === currentIndex) {
       link.classList.remove("has-text-white");
-      link.classList.add("has-text-black", "has-text-weight-bold");
+      link.classList.add("has-text-info-light", "has-text-weight-bold");
       link.removeAttribute("href");
       link.style.cursor = "default";
       return;
@@ -42,7 +42,7 @@ function showBreadcrumb() {
     // ---- FUTURE PAGES (disabled) ----
     if (index > currentIndex) {
       link.classList.remove("has-text-white");
-      link.classList.add("has-text-grey");
+      link.classList.add("has-text-black");
       link.removeAttribute("href");
       link.style.pointerEvents = "none";
       link.style.cursor = "not-allowed";

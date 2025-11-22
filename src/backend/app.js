@@ -6,6 +6,9 @@ const register = require('./routes/global/registerRoute.js')
 const home = require('./routes/global/homeRoute.js');
 const dashboard = require('./routes/admin/dashboardRoute.js');
 const services = require('./routes/admin/servicesRoute.js');
+const category = require('./routes/admin/categoryRoute.js');
+const service = require('./routes/admin/serviceRoute.js');
+
 const employees = require('./routes/admin/employeesRoute.js');
 
 const pricing = require('./routes/global/pricingRoute.js');
@@ -28,6 +31,7 @@ const sessionMiddleware = require('./core/middleware/session.js');
 app.use(sessionMiddleware);
 
 const route = '/login';
+//const newPath = 'src/frontend/public/partials/category.html';
 const newPath = 'src/frontend/pages/auth/login/index.html';
 
 app.get('/', (req, res) => {
@@ -47,10 +51,14 @@ app.use('/', register);
 app.use('/', home);
 app.use('/', dashboard);
 app.use('/', services);
+app.use('/', category);
+app.use('/', service);
+
 app.use('/', employees);
 
 app.use('/', pricing);
 app.use('/', team);
 app.use('/', booking);
+app.set("view engine", "ejs");
 
 module.exports = app;
