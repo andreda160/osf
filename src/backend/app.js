@@ -28,7 +28,7 @@ const sessionMiddleware = require('./core/middleware/session.js');
 app.use(sessionMiddleware);
 
 const route = '/login';
-const newPath = 'src/frontend/pages/shop/confirm/index.html';
+const newPath = 'src/frontend/pages/auth/login/index.html';
 
 app.get('/', (req, res) => {
   res.redirect(route);
